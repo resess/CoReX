@@ -1,0 +1,427 @@
+package ca.ubc.ece.resess.slicer.dynamic.slicer4j;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import ca.ubc.ece.resess.slicer.dynamic.core.graph.DynamicControlFlowGraph;
+import ca.ubc.ece.resess.slicer.dynamic.core.slicer.DynamicSlice;
+import ca.ubc.ece.resess.slicer.dynamic.core.statements.StatementInstance;
+
+
+public class ProgramTests {
+
+    Path root = Paths.get(".").normalize().toAbsolutePath();
+    Path slicerPath = Paths.get(root.getParent().toString(), "scripts");
+    Path outDir = Paths.get(slicerPath.toString(), "testTempDir");
+    Path sliceLogger = Paths.get(root.getParent().getParent().toString(), "DynamicSlicingCore" + File.separator + "DynamicSlicingLoggingClasses" + File.separator + "DynamicSlicingLogger.jar");
+
+    @BeforeAll 
+    static void preCleanUp() throws IOException {
+        TestUtils.cleanWorkingDirectory();
+    }
+    
+    @AfterEach 
+    void postCleanUp() throws IOException {
+        TestUtils.cleanWorkingDirectory();
+    }
+
+
+    @Test
+    void issue1() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-issue1");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test1-issue-1.0.0.jar").toString();
+        TestUtils.buildJar(testPath);
+        
+        String [] args = {
+            "-m", 
+            "i",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-lc",
+            sliceLogger.toString()
+        };
+        Slicer.main(args);
+        
+        ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", "java -Xmx8g -cp " + outDir.toString() + File.separator + "test1-issue-1.0.0_i.jar Main | grep \"SLICING\"");
+        System.out.println(pb.command());
+        Process p = pb.start();
+        p.waitFor();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(outDir.toString() + File.separator + "trace.log"));
+        String readline;
+        while ((readline = reader.readLine()) != null) {
+            writer.write(readline);
+            writer.write("\n");
+        }
+        writer.close();
+        reader.close();
+        
+        args = new String [] {
+            "-m", 
+            "g",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt"
+        };
+        Slicer.main(args);
+        
+        args = new String [] {
+            "-m", 
+            "s",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt",
+            "-sp",
+            "15"
+        };
+        Slicer.main(args);
+        
+        Path outputPath = Paths.get(slicerPath.toString(), "testTempDir" + File.separator + "slice.log");
+        List<String> out = Files.readAllLines(outputPath);
+        System.out.println(out);
+        
+        assertEquals(Arrays.asList(
+        "Main:6",
+        "Main:7",
+        "Main:17",
+        "Main:18",
+        "Main:8",
+        "Main:13",
+        "Main:9"), 
+        out);
+    }
+    
+    @Test
+    void issue2() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-issue2");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test2-issue-1.0.0.jar").toString();
+        TestUtils.buildJar(testPath);
+        
+        String [] args = {
+            "-m", 
+            "i",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-lc",
+            sliceLogger.toString()
+        };
+        Slicer.main(args);
+        
+        ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", "java -Xmx8g -cp " + outDir.toString() + File.separator + "test2-issue-1.0.0_i.jar Main something | grep \"SLICING\"");
+        System.out.println(pb.command());
+        Process p = pb.start();
+        p.waitFor();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(outDir.toString() + File.separator + "trace.log"));
+        String readline;
+        while ((readline = reader.readLine()) != null) {
+            writer.write(readline);
+            writer.write("\n");
+        }
+        writer.close();
+        reader.close();
+        
+        args = new String [] {
+            "-m", 
+            "g",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt"
+        };
+        Slicer.main(args);
+        
+        args = new String [] {
+            "-m", 
+            "s",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt",
+            "-sp",
+            "16"
+        };
+        Slicer.main(args);
+        
+        Path outputPath = Paths.get(slicerPath.toString(), "testTempDir" + File.separator + "slice.log");
+        List<String> out = Files.readAllLines(outputPath);
+        System.out.println(out);
+        
+        assertEquals(Arrays.asList(
+        "Main:6",
+        "Main:15",
+        "Main:16",
+        "Main:19",
+        "Main:8",
+        "Main:9",
+        "Main:11"), 
+        out);
+    }
+    
+    
+    @Test
+    void sliceOnce() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-issue1");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test1-issue-1.0.0.jar").toString();
+        TestUtils.buildJar(testPath);
+        
+        String [] args = {
+            "-m", 
+            "i",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-lc",
+            sliceLogger.toString()
+        };
+        Slicer.main(args);
+        
+        ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", "java -Xmx8g -cp " + outDir.toString() + File.separator + "test1-issue-1.0.0_i.jar Main | grep \"SLICING\"");
+        System.out.println(pb.command());
+        Process p = pb.start();
+        p.waitFor();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(outDir.toString() + File.separator + "trace.log"));
+        String readline;
+        while ((readline = reader.readLine()) != null) {
+            writer.write(readline);
+            writer.write("\n");
+        }
+        writer.close();
+        reader.close();
+        
+        args = new String [] {
+            "-m", 
+            "g",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt"
+        };
+        Slicer.main(args);
+        
+        args = new String [] {
+            "-m", 
+            "s",
+            "-j",
+            jarPath,
+            "-o",
+            outDir.toString(), 
+            "-t",
+            outDir.toString() + File.separator + "trace.log",
+            "-sl", 
+            outDir.toString() + File.separator + "static_log.log",
+            "-sd",
+            root.getParent().toString() + File.separator + "models" + File.separator + "summariesManual",
+            "-tw",
+            root.getParent().toString() + File.separator + "models" + File.separator + "EasyTaintWrapperSource.txt",
+            "-sp",
+            "15",
+            "-once"
+        };
+        Slicer.main(args);
+        
+        Path outputPath = Paths.get(slicerPath.toString(), "testTempDir" + File.separator + "slice.log");
+        List<String> out = Files.readAllLines(outputPath);
+        System.out.println(out);
+        
+        assertEquals(Arrays.asList(
+        "Main:13",
+        "Main:9"), 
+        out);
+    }
+
+
+    @Test
+    void issue5() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-issue5");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test-issue5-1.0.0.jar").toString();
+        
+        TestUtils.buildJar(testPath);
+        
+        Slicer slicer = TestUtils.setupSlicing(root, jarPath, outDir, sliceLogger);
+        slicer.setDebug(true);
+        String instrumentedJar = slicer.instrument();
+        slicer.runInstrumentedJarFromMain(instrumentedJar, "TreeAdd", "-l 2");
+        
+        DynamicControlFlowGraph dcfg = slicer.prepareGraph();
+        slicer.printGraph(dcfg);
+        
+        Integer tracePositionToSliceFrom = 107;
+        Set<String> sliceLines = TestUtils.sliceAndGetSourceLines(slicer, dcfg, tracePositionToSliceFrom);
+
+        Set<String> expected = new HashSet<>(Arrays.asList(
+            "TreeAdd:68",
+            "TreeNode:50",
+            "TreeNode:102",
+            "TreeAdd:67",
+            "TreeNode:60",
+            "TreeNode:101",
+            "TreeNode:104",
+            "TreeAdd:36",
+            "TreeNode:103",
+            "TreeNode:106",
+            "TreeNode:105",
+            "TreeAdd:70",
+            "TreeAdd:62",
+            "TreeNode:49",
+            "TreeAdd:40",
+            "TreeAdd:72",
+            "TreeNode:59",
+            "TreeAdd:53",
+            "TreeAdd:33",
+            "TreeAdd:65"));
+
+        assertEquals(expected, sliceLines);
+    }
+    
+    @Test
+    void directStatementDependency() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-issue1");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test1-issue-1.0.0.jar").toString();
+        
+        TestUtils.buildJar(testPath);
+        
+        Slicer slicer = TestUtils.setupSlicing(root, jarPath, outDir, sliceLogger);
+        
+        String instrumentedJar = slicer.instrument();
+        slicer.runInstrumentedJarFromMain(instrumentedJar, "Main", "");
+        
+        DynamicControlFlowGraph dcfg = slicer.prepareGraph();
+        slicer.printGraph(dcfg);
+        
+        Integer tracePositionToSliceFrom = 15;
+        Map<StatementInstance, String> slideDeps = TestUtils.sliceAndGetDirectDepdendeincesMap(slicer, dcfg, tracePositionToSliceFrom);
+        
+        Map<StatementInstance, String> expected = new HashMap<>();
+        expected.put(dcfg.mapNoUnits(15), "start");
+        expected.put(dcfg.mapNoUnits(14), "data, varaible:stack5, source:15");
+        expected.put(dcfg.mapNoUnits(13), "data, varaible:stack4, source:15");
+        expected.put(dcfg.mapNoUnits(11), "data, varaible:a, source:14");
+
+        assertEquals(expected, slideDeps);
+    }
+
+
+    @Test
+    void testFieldsFramework() throws IOException, InterruptedException {
+        Path testPath = Paths.get(root.getParent().toString(), "benchmarks" + File.separator + "test-fields-framework");
+        String jarPath = Paths.get(testPath.toString(), "target" + File.separator + "test-fields-framework-1.0.0.jar").toString();
+        
+        TestUtils.buildJar(testPath);
+        
+        Slicer slicer = TestUtils.setupSlicing(root, jarPath, outDir, sliceLogger);
+        slicer.setDebug(true);
+        String instrumentedJar = slicer.instrument();
+        slicer.runInstrumentedJarFromMain(instrumentedJar, "Main", "");
+        
+        DynamicControlFlowGraph dcfg = slicer.prepareGraph();
+        slicer.printGraph(dcfg);
+        
+        Integer tracePositionToSliceFrom = 21;
+        Set<String> sliceLines = TestUtils.sliceAndGetSourceLines(slicer, dcfg, tracePositionToSliceFrom);
+
+        Set<String> expected = new HashSet<>(Arrays.asList(
+            "Main:18",
+            "Main:17",
+            "Main:9",
+            "Main:8",
+            "Main:13",
+            "Main:7",
+            "Main:5"
+            ));
+
+        assertEquals(expected, sliceLines);
+    }
+    @Test
+    void overFlowTest() throws IOException, InterruptedException {
+        String old_jarPath = "/Users/sahar1/Documents/Projects/LibraryUpadate/Code/Tools/DualBased/defects4j/bug_repos/Libre/1/results/new/program.jar";
+        Path old_outDir = Paths.get("/Users/sahar1/Documents/Projects/LibraryUpadate/Code/Tools/DualBased/defects4j/bug_repos/Libre/1/results/new/Slicer4JResults");
+        Slicer old_slicer = TestUtils.setupSlicing(root, old_jarPath, old_outDir, sliceLogger);
+        DynamicControlFlowGraph old_dcfg = old_slicer.prepareGraph();
+
+        Integer tracePositionToSliceFrom1 =43569;
+        StatementInstance stmt1 = old_dcfg.mapNoUnits(tracePositionToSliceFrom1);
+        DynamicSlice dynamicSlice1 = old_slicer.directStatementDependency(stmt1, false, false);
+        Map<StatementInstance, String> sliceDeps1 = dynamicSlice1.getSliceDependenciesAsMap();
+        for(StatementInstance stm: sliceDeps1.keySet()) {
+            System.out.println(stm);
+            System.out.println(sliceDeps1.get(stm));
+        }
+    }
+}
