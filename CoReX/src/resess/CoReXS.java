@@ -2020,7 +2020,7 @@ public class CoReXS {
 		if(!Files.exists(path)) 
 			new File(basePath+"/results").mkdirs();
 		
-		String results = basePath+"/results/"+projectName+"CoReX_Paper_Results.xlsx";
+		String results = basePath+"/results/"+projectName+"_CoReX_Paper_Results.xlsx";
 	    File tempFile = new File(results);
 	    boolean FirstTime = false;
 	    
@@ -2393,16 +2393,16 @@ public class CoReXS {
 	       
 //           boolean Einspect5_CoReX = CanFindTheBug(5, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	    
 //           boolean Einspect10_CoReX = CanFindTheBug(10, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	       
-           boolean Einspect30_CoReX = CanFindTheBug(30, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	       
-	       boolean Einspect50_CoReX = CanFindTheBug(50, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	  
-//	       boolean Einspect100_CoReX = CanFindTheBug(100, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	  
-	       boolean Einspect200_CoReX = CanFindTheBug(200, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	       
-//	       boolean Einspect500_CoReX = CanFindTheBug(500, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	
-	       
-	       
-	       boolean Einspect30_InPreSSPlus = CanFindTheBug(30, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);	       
-	       boolean Einspect50_InPreSSPlus = CanFindTheBug(50, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);
-	       boolean Einspect200_InPreSSPlus = CanFindTheBug(200, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);	
+//           boolean Einspect30_CoReX = CanFindTheBug(30, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	       
+//	       boolean Einspect50_CoReX = CanFindTheBug(50, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	  
+////	       boolean Einspect100_CoReX = CanFindTheBug(100, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	  
+//	       boolean Einspect200_CoReX = CanFindTheBug(200, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	       
+////	       boolean Einspect500_CoReX = CanFindTheBug(500, old_kept_without_reaching_and_keeping_sameDepMatched, new_kept_without_reaching_and_keeping_sameDepMatched,old_retained,new_retained);	
+//	       
+//	       
+//	       boolean Einspect30_InPreSSPlus = CanFindTheBug(30, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);	       
+//	       boolean Einspect50_InPreSSPlus = CanFindTheBug(50, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);
+//	       boolean Einspect200_InPreSSPlus = CanFindTheBug(200, old_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus, new_kept_without_reaching_and_keeping_sameDepMatched_inpressPlus,old_retained,new_retained);	
 
 	       
 //	       int traversed_old_CoReX = CalculateWastedEffort(old_kept_without_reaching_and_keeping_sameDepMatched,old_retained);
@@ -2413,38 +2413,38 @@ public class CoReXS {
 	       
 
 
-	       if (FirstTime) {		    	
-		        String[] header = {"Bug ID", 
-		        		"Einspect@30-inpressPlus",
-		        		"Einspect@50-inpressPlus",
-		        		"Einspect@200-inpressPlus",
-//		        		"Einspect@5-CoReX", 
-//		        		"Einspect@10-CoReX", 
-		        		"Einspect@30-CoReX",
-		        		"Einspect@50-CoReX",
-//		        		"Einspect@100-CoReX",
-		        		"Einspect@200-CoReX"
-//		        		"Einspect@500-CoReX",
-//		        		"#Traversed Old Stmt-CoReX","#Traversed New Stmt-CoReX",
-//		        		"Exam% Old-CoReX","Exam% New-CoReX"	       
-		        		};
-		        WriteToExcel(results, header, "E_inspect",true, true);
-		    }
-		    String[] detailedDataRQ4 = {bugID, 
-		    		String.valueOf(Einspect30_InPreSSPlus),
-		    		String.valueOf(Einspect50_InPreSSPlus),
-		    		String.valueOf(Einspect200_InPreSSPlus),
-//		    		String.valueOf(Einspect5_CoReX),
-//		    		String.valueOf(Einspect10_CoReX),
-		    		String.valueOf(Einspect30_CoReX),
-		    		String.valueOf(Einspect50_CoReX),
-//		    		String.valueOf(Einspect100_CoReX),
-		    		String.valueOf(Einspect200_CoReX),
-//		    		String.valueOf(Einspect500_CoReX),
-//		    		String.valueOf(traversed_old_CoReX),String.valueOf(traversed_new_CoReX),
-//		    		String.valueOf(wasted_effort_old_CoReX),String.valueOf(wasted_effort_new_CoRex)
-		    };
-		    WriteToExcel(results,detailedDataRQ4,"E_inspect",true, false);
+//	       if (FirstTime) {		    	
+//		        String[] header = {"Bug ID", 
+//		        		"Einspect@30-inpressPlus",
+//		        		"Einspect@50-inpressPlus",
+//		        		"Einspect@200-inpressPlus",
+////		        		"Einspect@5-CoReX", 
+////		        		"Einspect@10-CoReX", 
+//		        		"Einspect@30-CoReX",
+//		        		"Einspect@50-CoReX",
+////		        		"Einspect@100-CoReX",
+//		        		"Einspect@200-CoReX"
+////		        		"Einspect@500-CoReX",
+////		        		"#Traversed Old Stmt-CoReX","#Traversed New Stmt-CoReX",
+////		        		"Exam% Old-CoReX","Exam% New-CoReX"	       
+//		        		};
+//		        WriteToExcel(results, header, "E_inspect",true, true);
+//		    }
+//		    String[] detailedDataRQ4 = {bugID, 
+//		    		String.valueOf(Einspect30_InPreSSPlus),
+//		    		String.valueOf(Einspect50_InPreSSPlus),
+//		    		String.valueOf(Einspect200_InPreSSPlus),
+////		    		String.valueOf(Einspect5_CoReX),
+////		    		String.valueOf(Einspect10_CoReX),
+//		    		String.valueOf(Einspect30_CoReX),
+//		    		String.valueOf(Einspect50_CoReX),
+////		    		String.valueOf(Einspect100_CoReX),
+//		    		String.valueOf(Einspect200_CoReX),
+////		    		String.valueOf(Einspect500_CoReX),
+////		    		String.valueOf(traversed_old_CoReX),String.valueOf(traversed_new_CoReX),
+////		    		String.valueOf(wasted_effort_old_CoReX),String.valueOf(wasted_effort_new_CoRex)
+//		    };
+//		    WriteToExcel(results,detailedDataRQ4,"E_inspect",true, false);
 						
 		       
 	           
