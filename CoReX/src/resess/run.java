@@ -28,7 +28,7 @@ public class run {
 		//String testcase = "com.google.javascript.jscomp.IntegrationTest::testIssue787"; //clousr(1)
 		String testcase = args[3];
 		
-		String  save_slice_results = "true"; // to save the actual slice in the file with Func...
+		String  save_slice_results = "false"; // to save the actual slice in the file with Func...
 //		String save_slice_results = args[4]; 
 		
 		
