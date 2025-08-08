@@ -41,7 +41,7 @@ we included the repositories of Slicer4J, ERASE, and its underlying Microbat (ht
 
 1. Start with cloning the repository:
 ````yaml
-git clone https://github.com/resess/InPreSS.git
+git clone https://github.com/resess/CoReX.git
 ````
 In this repo, we provide:
 - microbat: including all microbat subprojects
