@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="tregression_script/src"/>
+	<classpathentry kind="src" path="tregression/src/main"/>
+	<classpathentry kind="lib" path="tregression_script/lib/poi-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression_script/lib/poi-ooxml-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression_script/lib/poi-ooxml-schemas-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression_script/lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="tregression/lib/poi-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression/lib/poi-ooxml-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression/lib/poi-ooxml-schemas-3.11-20141221.jar"/>
+	<classpathentry kind="lib" path="tregression/lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/experiment.utils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/microbat"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/microbat_instrumentator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/microbat_junit_test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/mutation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sav.commons"/>
+	<classpathentry kind="lib" path="tregression/lib/org.eclipse.core.runtime-3.18.0.jar"/>
+	<classpathentry kind="lib" path="/InPreSS/deps/lib/org.eclipse.equinox.common-3.12.0.jar"/>
+	<classpathentry kind="lib" path="/microbat/lib/org.eclipse.jdt.core-3.10.0.jar"/>
+	<classpathentry kind="output" path="tregression/bin"/>
+</classpath>

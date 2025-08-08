@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="microbat_mutation_trace"
+            id="microbat_mutation_trace.commands.category">
+      </category>
+      <command
+            name="Generate Mutation Trace"
+            categoryId="microbat_mutation_trace.commands.category"
+            id="microbat_mutation_trace.commands.generate_mutation_trace">
+      </command>
+      <command
+            categoryId="microbat_mutation_trace.commands.category"
+            id="microbat_mutation_trace.commands.muregression"
+            name="Retrieve From DB">
+      </command>
+      <command
+            categoryId="microbat_mutation_trace.commands.category"
+            id="microbat_mutation_trace.commands.singleRun"
+            name="Run Single Mutation">
+      </command>
+      <command
+            categoryId="microbat_mutation_trace.commands.category"
+            id="microbat_mutation_trace.commands.evaluate_mutation_trace"
+            name="Evaluate Mutation Regression">
+      </command>
+      <command
+            categoryId="microbat_mutation_trace.commands.category"
+            id="microbat_mutation_trace.commands.regenerate_csv"
+            name="Regenerate csv files">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="microbat_mutation_trace.commands.generate_mutation_trace"
+            class="microbat.mutation.trace.handlers.MutationGenerationHandler">
+      </handler>
+      <handler
+            class="microbat.mutation.trace.handlers.RunSingleMutationHandler"
+            commandId="microbat_mutation_trace.commands.singleRun">
+      </handler>
+      <handler
+            class="microbat.mutation.trace.handlers.EvaluateMutationRegressionHandler"
+            commandId="microbat_mutation_trace.commands.evaluate_mutation_trace">
+      </handler>
+      <handler
+            class="microbat.mutation.trace.handlers.RegenerateCsvFilesHandler"
+            commandId="microbat_mutation_trace.commands.regenerate_csv">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="microbat_mutation_trace.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="Generate Mutation Trace"
+               mnemonic="M"
+               id="microbat_mutation_trace.menus.sampleMenu">
+            <command
+                  commandId="microbat_mutation_trace.commands.generate_mutation_trace"
+                  mnemonic="S"
+                  id="microbat_mutation_trace.menus.generate_mutation_trace">
+            </command>
+             <command
+                   commandId="microbat_mutation_trace.commands.evaluate_mutation_trace"
+                   id="microbat_mutation_trace.menus.evaluate_mutation_traces"
+                   mnemonic="S">
+             </command>
+             <command
+                   commandId="microbat_mutation_trace.commands.singleRun"
+                   id="microbat_mutation_trace.menus.singleRun">
+             </command>
+             <command
+                   commandId="microbat_mutation_trace.commands.regenerate_csv"
+                   id="microbat_mutation_trace.menus.regenerate_csv">
+             </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="microbat_mutation_trace.toolbars.sampleToolbar">
+            <command
+                  commandId="microbat_mutation_trace.commands.sampleCommand"
+                  icon="icons/sample.png"
+                  tooltip="Generate Mutation Trace"
+                  id="microbat_mutation_trace.toolbars.sampleCommand">
+            </command>
+            <command
+                  commandId="microbat_mutation_trace.commands.singleRun"
+                  icon="icons/mutation.png"
+                  id="microbat_mutation_trace.toolbars.singleRun"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="microbat.mutation.trace.preference.MutationRegressionPreference"
+            id="muregression.preference"
+            name="Mutation Regression">
+      </page>
+   </extension>
+</plugin>

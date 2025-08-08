@@ -1,0 +1,3 @@
+Manifest-Version: 1.01
+Premain-Class: microbat.instrumentation.Premain
+Can-Retransform-Classes: true

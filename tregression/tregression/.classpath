@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-3.11-20141221.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-3.11-20141221.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-ooxml-schemas-3.11-20141221.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/microbat_instrumentator"/>
+	<classpathentry kind="lib" path="lib/soot-infoflow-android-trunk-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/soot-infoflow-trunk.jar"/>
+	<classpathentry kind="lib" path="lib/soot-infoflow-trunk-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/core-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/gen.jdt-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.runtime-3.18.0.jar"/>
+	<classpathentry kind="lib" path="lib/simmetrics-core-3.2.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
